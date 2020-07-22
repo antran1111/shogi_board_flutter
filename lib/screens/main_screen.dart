@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shogi_board/constants.dart';
+import 'package:shogi_board/models/kaisetu.dart';
 
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final kaisetu = Kaisetu();
+    print(kaisetu.Tejun[0].board);
+
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
@@ -47,7 +51,7 @@ class MainScreen extends StatelessWidget {
                               //color: Color(0xFFf2c077),
                               child: Center(
                                   child: Text(
-                                '歩',
+                                kaisetu.Tejun[0].getMasu(index),
                                 style: TextStyle(fontSize: 16),
                               )),
                             );
@@ -66,16 +70,7 @@ class MainScreen extends StatelessWidget {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Text(
-                          "銀と桂交換なら先手の得。なのでここはooの一手。 " +
-                              "2 Description that is too long in text format(Here Data is coming from API) d fsdfdsfsdfd dfdsfdsf sdfdsfsd d " +
-                              "3 Description that is too long in text format(Here Data is coming from API)  adfsfdsfdfsdfdsf   dsf dfd fds fs" +
-                              "4 Description that is too long in text format(Here Data is coming from API) dsaf dsafdfdfsd dfdsfsda fdas dsad" +
-                              "5 Description that is too long in text format(Here Data is coming from API) dsfdsfd fdsfds fds fdsf dsfds fds " +
-                              "6 Description that is too long in text format(Here Data is coming from API) asdfsdfdsf fsdf sdfsdfdsf sd dfdsf" +
-                              "7 Description that is too long in text format(Here Data is coming from API) df dsfdsfdsfdsfds df dsfds fds fsd" +
-                              "8 Description that is too long in text format(Here Data is coming from API)" +
-                              "9 Description that is too long in text format(Here Data is coming from API)" +
-                              "10 Description that is too long in text format(Here Data is coming from API)",
+                          kaisetu.Tejun[0].memo,
                           style: new TextStyle(
                             fontSize: 16.0,
                             color: Colors.black,
