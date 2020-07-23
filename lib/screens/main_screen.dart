@@ -5,8 +5,10 @@ import 'package:shogi_board/models/kaisetu.dart';
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final kaisetu = Kaisetu();
-    print(kaisetu.Tejun[0].board);
+    var kaisetu = Kaisetu();
+    var turn = 0;
+    kaisetu.tejun[1].gotehands['飛'] = 2;
+    print(kaisetu.tejun[0].board);
 
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -24,9 +26,33 @@ class MainScreen extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     Container(
-                      height: size.width / 12,
-                      width: size.width / 12 * 7,
+                      height: size.width / 10,
+                      width: size.width / 10 * 7,
                       color: khandsColor,
+                      child: GridView.count(
+                        crossAxisCount: 7,
+                        children: List<Widget>.generate(7, (index) {
+                          //final piece = boardData.cell(index);
+                          List<String> handsOrder = [
+                            '飛',
+                            '角',
+                            '金',
+                            '銀',
+                            '桂',
+                            '香',
+                            '歩'
+                          ];
+                          int count =
+                              kaisetu.tejun[0].gotehands[handsOrder[index]];
+                          return Container(
+                            child: Center(
+                                child: Text(
+                              count > 0 ? '${handsOrder[index]}$count' : '',
+                              style: TextStyle(fontSize: 16),
+                            )),
+                          );
+                        }),
+                      ),
                     ),
                     Container(
                       height: size.width,
@@ -51,7 +77,7 @@ class MainScreen extends StatelessWidget {
                               //color: Color(0xFFf2c077),
                               child: Center(
                                   child: Text(
-                                kaisetu.Tejun[0].getMasu(index),
+                                kaisetu.tejun[0].getMasu(index),
                                 style: TextStyle(fontSize: 16),
                               )),
                             );
@@ -61,16 +87,40 @@ class MainScreen extends StatelessWidget {
                     ),
                     Container(
                       alignment: Alignment(-1, -1),
-                      height: size.width / 12,
-                      width: size.width / 12 * 7,
+                      height: size.width / 10,
+                      width: size.width / 10 * 7,
                       color: khandsColor,
+                      child: GridView.count(
+                        crossAxisCount: 7,
+                        children: List<Widget>.generate(7, (index) {
+                          //final piece = boardData.cell(index);
+                          List<String> handsOrder = [
+                            '飛',
+                            '角',
+                            '金',
+                            '銀',
+                            '桂',
+                            '香',
+                            '歩'
+                          ];
+                          int count =
+                              kaisetu.tejun[0].sentehands[handsOrder[index]];
+                          return Container(
+                            child: Center(
+                                child: Text(
+                              count > 0 ? '${handsOrder[index]}$count' : '',
+                              style: TextStyle(fontSize: 16),
+                            )),
+                          );
+                        }),
+                      ),
                     ),
                     Container(
-                      height: 170,
+                      height: 150,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Text(
-                          kaisetu.Tejun[0].memo,
+                          kaisetu.tejun[0].memo,
                           style: new TextStyle(
                             fontSize: 16.0,
                             color: Colors.black,

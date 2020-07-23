@@ -1,8 +1,8 @@
 class Kaisetu {
-  List<Kyokumen> Tejun;
+  List<Kyokumen> tejun;
 
   Kaisetu() {
-    Tejun = [
+    tejun = [
       Kyokumen(),
       Kyokumen(),
     ];
@@ -45,13 +45,13 @@ class Kyokumen {
     };
 
     sentehands = {
-      '歩': 0,
-      '香': 0,
-      '桂': 0,
-      '銀': 0,
-      '金': 0,
-      '角': 0,
-      '飛': 0,
+      '歩': 1,
+      '香': 2,
+      '桂': 3,
+      '銀': 4,
+      '金': 4,
+      '角': 1,
+      '飛': 2,
     };
   }
 
