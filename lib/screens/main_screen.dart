@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shogi_board/constants.dart';
-import 'package:shogi_board/models/kaisetu.dart';
+import 'package:provider/provider.dart';
+import 'package:shogi_board/models/board_data.dart';
 
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var kaisetu = Kaisetu();
-    var turn = 0;
-    kaisetu.tejun[1].gotehands['飛'] = 2;
-    print(kaisetu.tejun[0].board);
-
     final Size size = MediaQuery.of(context).size;
-    return Scaffold(
+    return Consumer<BoardData>(builder: (context, boardData, child) {
+      print(boardData);
+
+      boardData.setInitial();
+      int turn = boardData.turn;
+      return Scaffold(
         appBar: AppBar(
           title: Text(
             "戦法解説",
@@ -42,8 +43,8 @@ class MainScreen extends StatelessWidget {
                             '香',
                             '歩'
                           ];
-                          int count =
-                              kaisetu.tejun[0].gotehands[handsOrder[index]];
+                          int count = boardData
+                              .kaisetu.tejun[turn].gotehands[handsOrder[index]];
                           return Container(
                             child: Center(
                                 child: Text(
@@ -77,7 +78,7 @@ class MainScreen extends StatelessWidget {
                               //color: Color(0xFFf2c077),
                               child: Center(
                                   child: Text(
-                                kaisetu.tejun[0].getMasu(index),
+                                boardData.kaisetu.tejun[turn].getMasu(index),
                                 style: TextStyle(fontSize: 16),
                               )),
                             );
@@ -103,8 +104,8 @@ class MainScreen extends StatelessWidget {
                             '香',
                             '歩'
                           ];
-                          int count =
-                              kaisetu.tejun[0].sentehands[handsOrder[index]];
+                          int count = boardData.kaisetu.tejun[turn]
+                              .sentehands[handsOrder[index]];
                           return Container(
                             child: Center(
                                 child: Text(
@@ -120,7 +121,7 @@ class MainScreen extends StatelessWidget {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Text(
-                          kaisetu.tejun[0].memo,
+                          boardData.kaisetu.tejun[turn].memo,
                           style: new TextStyle(
                             fontSize: 16.0,
                             color: Colors.black,
@@ -133,11 +134,11 @@ class MainScreen extends StatelessWidget {
                         IconButton(
                             iconSize: 35,
                             icon: Icon(Icons.arrow_back_ios),
-                            onPressed: null),
+                            onPressed: () => boardData.toggleTurn()),
                         IconButton(
                             iconSize: 35,
                             icon: Icon(Icons.arrow_forward_ios),
-                            onPressed: null),
+                            onPressed: () => boardData.toggleTurn()),
                       ],
                     )
                   ],
@@ -145,6 +146,8 @@ class MainScreen extends StatelessWidget {
               ],
             ),
           ),
-        ));
+        ),
+      );
+    });
   }
 }
