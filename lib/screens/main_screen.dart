@@ -8,10 +8,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Consumer<BoardData>(builder: (context, boardData, child) {
-      //turn = 0;
-      //kaisetu = boardData.Kaisetu(kif: kif1);
-      //boardData.setInitial();
-      int turn = boardData.turn;
+      int kyokumenIndex = boardData.index;
       return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -43,7 +40,8 @@ class MainScreen extends StatelessWidget {
                             '香',
                             '歩'
                           ];
-                          var hands = boardData.kaisetu.tejun[turn].gotehands;
+                          var hands =
+                              boardData.kaisetu.tejun[kyokumenIndex].gotehands;
                           var count = hands[handsOrder[index]];
                           return Container(
                             child: Center(
@@ -78,7 +76,8 @@ class MainScreen extends StatelessWidget {
                               //color: Color(0xFFf2c077),
                               child: Center(
                                   child: Text(
-                                boardData.kaisetu.tejun[turn].getMasu(index),
+                                boardData.kaisetu.tejun[kyokumenIndex]
+                                    .getMasu(index),
                                 style: TextStyle(fontSize: 16),
                               )),
                             );
@@ -104,7 +103,7 @@ class MainScreen extends StatelessWidget {
                             '香',
                             '歩'
                           ];
-                          int count = boardData.kaisetu.tejun[turn]
+                          int count = boardData.kaisetu.tejun[kyokumenIndex]
                               .sentehands[handsOrder[index]];
                           return Container(
                             child: Center(
@@ -121,7 +120,7 @@ class MainScreen extends StatelessWidget {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Text(
-                          boardData.kaisetu.tejun[turn].memo,
+                          boardData.kaisetu.tejun[kyokumenIndex].memo,
                           style: new TextStyle(
                             fontSize: 16.0,
                             color: Colors.black,

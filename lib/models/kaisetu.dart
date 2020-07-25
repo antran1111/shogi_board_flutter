@@ -23,12 +23,17 @@ class Kaisetu {
     int turn = 0;
     List<String> moves = [''];
     List<String> memos = [];
-    String tempMemo = '';
+    List<Map<String, dynamic>> node;
+    String tempMemo;
+    int bunkiIndex = -1;
 
     for (String line in kif) {
       if (sashite == false) {
         if (line.startsWith('手数----指手')) {
           sashite = true;
+          node = [
+            {'turn': 0, 'parent': -1, 'children': []}
+          ];
         } else if (line.startsWith('後手番')) {
           goteban = true;
         } else if (line.startsWith('先手の持駒')) {
@@ -56,22 +61,47 @@ class Kaisetu {
         }
       } else {
         if (line.length > 0) {
-          if (line.startsWith('*')) {
+          if (line.startsWith('変化')) {
+            bunkiIndex = int.parse(line.substring(3, line.length - 1));
+          } else if (line.startsWith('*')) {
             tempMemo += '\n' + line.substring(1);
           } else {
             memos.add(tempMemo);
             tempMemo = '';
             moves.add(line);
+            int tesu = int.parse(line.split(' ')[0]);
+            if (bunkiIndex == -1) {
+              node[node.length - 1]['children'].add(node.length);
+              node.add(
+                  {'turn': tesu, 'parent': node.length - 1, 'children': []});
+            } else {
+              for (int i = node.length - 1; i > 0; i--) {
+                // 分岐元のchildrenに追加する
+                if (node[i]['turn'] == (bunkiIndex - 1)) {
+                  node[i]['children'].add(node.length);
+                  node.add({'turn': tesu, 'parent': i, 'children': []});
+                  break;
+                }
+              }
+              bunkiIndex = -1;
+            }
             turn++;
           }
         }
       }
     }
+
     memos.add(tempMemo);
-    tejun.add(Kyokumen(isInitailBoard: true, memo: memos[0], turn: 0));
+    tejun.add(
+        Kyokumen(isInitailBoard: true, memo: memos[0], turn: 0, node: node[0]));
     for (int i = 1; i < moves.length; i++) {
       tejun.add(Kyokumen(
-          prevKyokumen: tejun[i - 1], move: moves[i], turn: i, memo: memos[i]));
+          prevKyokumen: tejun[node[i]['parent']],
+          move: moves[i],
+          turn: i,
+          memo: memos[i],
+          node: node[i]));
+      //prevKyokumen: tejun[i - 1], move: moves[i], turn: i, memo: memos[i]));
     }
     print('局面数は ${tejun.length}');
   }
@@ -87,23 +117,30 @@ class Kyokumen {
   bool _senteban;
   String memo = '初期配置の解説です。初手は７６歩か２６歩が多い。７６歩は角道を開ける手で、２６歩は飛車先をついていく手になる。';
 
+  // 現在の手数、一手前のインデックス、次の局面のインデックス配列
+  // 例: {'turn': 15, 'parent': 14, 'children': [16,24]}
+  Map<String, dynamic> node = {};
+
   bool get senteban => _senteban;
   int get turn => _turn;
   List<String> get board => _board;
   Map<String, int> get sentehands => _sentehands;
   Map<String, int> get gotehands => _gotehands;
 
-  Kyokumen(
-      {isInitailBoard = false,
-      List<String> board,
-      String move,
-      Kyokumen prevKyokumen,
-      String senteHandsStr,
-      String goteHandsStr,
-      int turn,
-      String memo}) {
+  Kyokumen({
+    isInitailBoard = false,
+    List<String> board,
+    String move,
+    Kyokumen prevKyokumen,
+    String senteHandsStr,
+    String goteHandsStr,
+    int turn,
+    String memo,
+    Map<String, dynamic> node,
+  }) {
     this._turn = turn;
     this.memo = memo == null ? 'なし' : memo;
+    this.node = node;
 
     if (isInitailBoard) {
       initialBoard1();
@@ -229,9 +266,6 @@ class Kyokumen {
 
     String typeWithSengo = senteban ? ' ' + type : 'v' + type;
     putKoma(toSuji, toDan, typeWithSengo);
-    // 元の地点を空マスにする もしくは 持ち駒を一つ減らす
-    // 移動地点に移動する
-    // 移動地点に駒があった場合は持ち駒に加える
   }
 
   void putKoma(int suji, int dan, String type) {
@@ -249,6 +283,7 @@ class Kyokumen {
         tempDan.substring(exchangeStartPos, exchangeStartPos + 2);
     String sengo = captureKoma.substring(0, 1);
     String type = captureKoma.substring(1, 2);
+
     if (captureKoma == ' ・') {
       return;
     } else if (sengo == 'v') {
