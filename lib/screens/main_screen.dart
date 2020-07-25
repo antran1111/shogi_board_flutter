@@ -10,52 +10,40 @@ class MainScreen extends StatelessWidget {
     return Consumer<BoardData>(builder: (context, boardData, child) {
       int kyokumenIndex = boardData.index;
       return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "戦法解説",
-            style: TextStyle(),
+          appBar: AppBar(
+            title: Text(
+              "戦法解説",
+              style: TextStyle(),
+            ),
           ),
-        ),
-        body: SafeArea(
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
+          body: SafeArea(
+            child: Container(
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Row(children: <Widget>[
                     Container(
-                      height: size.width / 10,
-                      width: size.width / 10 * 7,
+                      height: size.width / 11 * 7,
+                      width: size.width / 11,
                       color: khandsColor,
-                      child: GridView.count(
-                        crossAxisCount: 7,
-                        children: List<Widget>.generate(7, (index) {
-                          //final piece = boardData.cell(index);
-                          List<String> handsOrder = [
-                            '飛',
-                            '角',
-                            '金',
-                            '銀',
-                            '桂',
-                            '香',
-                            '歩'
-                          ];
-                          var hands =
-                              boardData.kaisetu.tejun[kyokumenIndex].gotehands;
-                          var count = hands[handsOrder[index]];
+                      child: ListView.builder(
+                        itemBuilder: (BuildContext context, index) {
+                          int count = boardData.kaisetu.tejun[kyokumenIndex]
+                              .gotehands[kHandsOrder[index]];
                           return Container(
                             child: Center(
                                 child: Text(
-                              count > 0 ? '${handsOrder[index]}$count' : '',
+                              count > 0 ? '${kHandsOrder[index]}$count' : '',
                               style: TextStyle(fontSize: 16),
                             )),
                           );
-                        }),
+                        },
+                        itemCount: 7,
                       ),
                     ),
                     Container(
-                      height: size.width,
-                      width: size.width,
+                      height: size.width * 9 / 11,
+                      width: size.width * 9 / 11,
                       color: kBoardColor,
                       child: Container(
                         margin: EdgeInsets.all(3),
@@ -87,66 +75,54 @@ class MainScreen extends StatelessWidget {
                     ),
                     Container(
                       alignment: Alignment(-1, -1),
-                      height: size.width / 10,
-                      width: size.width / 10 * 7,
+                      height: size.width / 11 * 7,
+                      width: size.width / 11,
                       color: khandsColor,
-                      child: GridView.count(
-                        crossAxisCount: 7,
-                        children: List<Widget>.generate(7, (index) {
-                          //final piece = boardData.cell(index);
-                          List<String> handsOrder = [
-                            '飛',
-                            '角',
-                            '金',
-                            '銀',
-                            '桂',
-                            '香',
-                            '歩'
-                          ];
+                      child: ListView.builder(
+                        itemBuilder: (BuildContext context, index) {
                           int count = boardData.kaisetu.tejun[kyokumenIndex]
-                              .sentehands[handsOrder[index]];
+                              .sentehands[kHandsOrder[index]];
                           return Container(
                             child: Center(
                                 child: Text(
-                              count > 0 ? '${handsOrder[index]}$count' : '',
+                              count > 0 ? '${kHandsOrder[index]}$count' : '',
                               style: TextStyle(fontSize: 16),
                             )),
                           );
-                        }),
+                        },
+                        itemCount: 7,
                       ),
                     ),
-                    Container(
-                      height: 150,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Text(
-                          boardData.kaisetu.tejun[kyokumenIndex].memo,
-                          style: new TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.black,
-                          ),
+                  ]),
+                  Container(
+                    height: 250,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Text(
+                        boardData.kaisetu.tejun[kyokumenIndex].memo,
+                        style: new TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.black,
                         ),
                       ),
                     ),
-                    Row(
-                      children: <Widget>[
-                        IconButton(
-                            iconSize: 35,
-                            icon: Icon(Icons.arrow_back_ios),
-                            onPressed: () => boardData.backTurn()),
-                        IconButton(
-                            iconSize: 35,
-                            icon: Icon(Icons.arrow_forward_ios),
-                            onPressed: () => boardData.nextTurn()),
-                      ],
-                    )
-                  ],
-                ),
-              ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                          iconSize: 35,
+                          icon: Icon(Icons.arrow_back_ios),
+                          onPressed: () => boardData.backTurn()),
+                      IconButton(
+                          iconSize: 35,
+                          icon: Icon(Icons.arrow_forward_ios),
+                          onPressed: () => boardData.nextTurn()),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ),
-      );
+          ));
     });
   }
 }

@@ -26,7 +26,7 @@ class BoardData extends ChangeNotifier {
   void backTurn() {
     print(kaisetu.tejun[index].node['children']);
     if (kaisetu.tejun[index].node['parent'] >= 0) {
-      index = kaisetu.tejun[index].node['parent'][0];
+      index = kaisetu.tejun[index].node['parent'];
     } else {
       // 初期盤面だと伝える？
     }

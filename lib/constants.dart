@@ -76,3 +76,5 @@ const kTypeToOriginalType = {
   '馬': '角',
   '龍': '飛',
 };
+
+const kHandsOrder = ['飛', '角', '金', '銀', '桂', '香', '歩'];
