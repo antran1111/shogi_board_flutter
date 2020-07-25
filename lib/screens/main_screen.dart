@@ -8,9 +8,9 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Consumer<BoardData>(builder: (context, boardData, child) {
-      print(boardData);
-
-      boardData.setInitial();
+      //turn = 0;
+      //kaisetu = boardData.Kaisetu(kif: kif1);
+      //boardData.setInitial();
       int turn = boardData.turn;
       return Scaffold(
         appBar: AppBar(
@@ -43,8 +43,8 @@ class MainScreen extends StatelessWidget {
                             '香',
                             '歩'
                           ];
-                          int count = boardData
-                              .kaisetu.tejun[turn].gotehands[handsOrder[index]];
+                          var hands = boardData.kaisetu.tejun[turn].gotehands;
+                          var count = hands[handsOrder[index]];
                           return Container(
                             child: Center(
                                 child: Text(
@@ -134,11 +134,11 @@ class MainScreen extends StatelessWidget {
                         IconButton(
                             iconSize: 35,
                             icon: Icon(Icons.arrow_back_ios),
-                            onPressed: () => boardData.toggleTurn()),
+                            onPressed: () => boardData.backTurn()),
                         IconButton(
                             iconSize: 35,
                             icon: Icon(Icons.arrow_forward_ios),
-                            onPressed: () => boardData.toggleTurn()),
+                            onPressed: () => boardData.nextTurn()),
                       ],
                     )
                   ],

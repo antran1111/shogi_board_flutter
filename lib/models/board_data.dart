@@ -4,22 +4,46 @@ import 'package:shogi_board/models/kaisetu.dart';
 // 盤面情報モデル
 // タップされた情報に基づいて値を更新する
 class BoardData extends ChangeNotifier {
-  Kaisetu kaisetu = Kaisetu(kif: kif1);
+  Kaisetu kaisetu;
   int turn = 0;
 
-  void setInitial() {
-    kaisetu.tejun[1].gotehands['飛'] = 2;
-    kaisetu.tejun[1].memo = "まで";
+  BoardData() {
+    turn = 0;
+    kaisetu = Kaisetu(kif: kif3);
   }
 
-  void toggleTurn() {
-    turn = (turn == 0) ? 1 : 0;
+  void nextTurn() {
+    if (turn < kaisetu.tejun.length - 1) {
+      turn++;
+    } else {
+      turn = 0;
+    }
     notifyListeners();
-    print(turn);
+  }
+
+  void backTurn() {
+    if (turn > 0) {
+      turn--;
+    } else {
+      turn = kaisetu.tejun.length - 1;
+    }
+    notifyListeners();
   }
 }
 
 List<String> kif1 = [
+  '# ---- Kifu for Mac V0.24 棋譜ファイル ----',
+  '手合割：平手',
+  '先手：',
+  '後手：',
+  '手数----指手---------消費時間--',
+  '*初期盤面',
+  '1 ７六歩(77)   ( 0:03/00:00:03)',
+  '*ここで▲４八銀を上がらずに２筋を交換するのは危険。',
+  '*ここで▲４八銀を上がらずに２筋を交換するのは危険。',
+];
+
+List<String> kif3 = [
   '# ---- Kifu for Mac V0.24 棋譜ファイル ----',
   '手合割：平手',
   '先手：',
