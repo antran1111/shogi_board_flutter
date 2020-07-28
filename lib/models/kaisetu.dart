@@ -2,8 +2,10 @@ import 'package:shogi_board/constants.dart';
 
 class Kaisetu {
   List<Kyokumen> tejun = [];
+  String title;
 
-  Kaisetu({List<String> kif}) {
+  Kaisetu({List<String> kif, String title = 'no title'}) {
+    this.title = title;
     bool goteban = false;
     String goteMochigoma = '';
     String senteMochigoma = '';
@@ -101,7 +103,6 @@ class Kaisetu {
           turn: i,
           memo: memos[i],
           node: node[i]));
-      //prevKyokumen: tejun[i - 1], move: moves[i], turn: i, memo: memos[i]));
     }
     print('局面数は ${tejun.length}');
   }

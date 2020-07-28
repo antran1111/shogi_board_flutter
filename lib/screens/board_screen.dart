@@ -3,7 +3,9 @@ import 'package:shogi_board/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shogi_board/models/board_data.dart';
 
-class MainScreen extends StatelessWidget {
+class BoardScreen extends StatelessWidget {
+  static String id = '/board';
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -95,7 +97,7 @@ class MainScreen extends StatelessWidget {
                     ),
                   ]),
                   Container(
-                    height: 250,
+                    height: 150,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: Text(

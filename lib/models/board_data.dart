@@ -1,11 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:shogi_board/models/kaisetu.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 // 盤面情報モデル
 // タップされた情報に基づいて値を更新する
 class BoardData extends ChangeNotifier {
   Kaisetu kaisetu;
+  List<Kaisetu> _kaisetuList = [];
+  final _firestore = Firestore.instance;
+  bool fetching = true;
   int index = 0;
+
+  List<Kaisetu> get kaisetsuList => _kaisetuList;
 
   BoardData() {
     index = 0;
@@ -31,6 +37,19 @@ class BoardData extends ChangeNotifier {
       // 初期盤面だと伝える？
     }
     notifyListeners();
+  }
+
+  void setKaisetuList(List<DocumentSnapshot> snapshot) async {
+    for (var data in snapshot) {
+      print(data['title']);
+      print(data['kif'].split('\\n'));
+
+      //_kaisetuList
+      //    .add(Kaisetu(kif: data['kif'].split('\n'), title: data['title']));
+    }
+//    print('長さ${_kaisetuList.length}');
+//    print(_kaisetuList[0].title);
+    //notifyListeners();
   }
 }
 
