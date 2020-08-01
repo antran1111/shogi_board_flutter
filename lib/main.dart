@@ -3,13 +3,14 @@ import 'package:shogi_board/screens/board_screen.dart';
 import 'package:shogi_board/screens/menu_screen.dart';
 import 'package:shogi_board/models/board_data.dart';
 import 'package:provider/provider.dart';
-import 'package:shogi_board/screens/menu_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('hello');
     return ChangeNotifierProvider<BoardData>(
       create: (_) => BoardData(),
       child: MaterialApp(

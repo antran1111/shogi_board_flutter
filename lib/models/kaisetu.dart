@@ -25,13 +25,17 @@ class Kaisetu {
     int turn = 0;
     List<String> moves = [''];
     List<String> memos = [];
-    List<Map<String, dynamic>> node;
+    List<Map<String, dynamic>> node = [];
     String tempMemo;
     int bunkiIndex = -1;
 
     for (String line in kif) {
       if (sashite == false) {
+        print(line);
+        print(line.trim());
+        print('この行#$line#手数----指手 ${line.startsWith('手数----指手')}');
         if (line.startsWith('手数----指手')) {
+          print("%%%%%%%%%%%%////////////");
           sashite = true;
           node = [
             {'turn': 0, 'parent': -1, 'children': []}
@@ -93,6 +97,7 @@ class Kaisetu {
       }
     }
 
+    print('memo $memos node $node');
     memos.add(tempMemo);
     tejun.add(
         Kyokumen(isInitailBoard: true, memo: memos[0], turn: 0, node: node[0]));

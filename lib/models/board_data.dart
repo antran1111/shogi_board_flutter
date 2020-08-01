@@ -7,8 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BoardData extends ChangeNotifier {
   Kaisetu kaisetu;
   List<Kaisetu> _kaisetuList = [];
-  final _firestore = Firestore.instance;
-  bool fetching = true;
+  List<String> currentKif;
+  String currentTitle;
   int index = 0;
 
   List<Kaisetu> get kaisetsuList => _kaisetuList;
@@ -39,17 +39,12 @@ class BoardData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setKaisetuList(List<DocumentSnapshot> snapshot) async {
-    for (var data in snapshot) {
-      print(data['title']);
-      print(data['kif'].split('\\n'));
-
-      //_kaisetuList
-      //    .add(Kaisetu(kif: data['kif'].split('\n'), title: data['title']));
-    }
-//    print('長さ${_kaisetuList.length}');
-//    print(_kaisetuList[0].title);
-    //notifyListeners();
+  void setKaisetu(List<DocumentSnapshot> snapshot, int index) async {
+    currentTitle = snapshot[index].data['title'];
+    currentKif = snapshot[index].data['kif'].split('\\n');
+    currentKif = currentKif.map((line) => line.trim()).toList();
+    print(currentKif);
+    kaisetu = Kaisetu(kif: currentKif);
   }
 }
 

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:shogi_board/models/board_data.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shogi_board/screens/board_screen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -13,6 +12,7 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('hello2');
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -27,6 +27,7 @@ class MenuScreen extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     // 非同期処理未完了 = 通信中
+                    print('通信中！');
                     return Center(
                       child: CircularProgressIndicator(
                         backgroundColor: Colors.lightBlueAccent,
@@ -35,8 +36,9 @@ class MenuScreen extends StatelessWidget {
                   }
 
                   final tactics = snapshot.data.documents;
-                  Provider.of<BoardData>(context, listen: false)
-                      .setKaisetuList(tactics);
+                  print('tactics');
+                  print(tactics);
+
                   return ListView.builder(
                       itemCount: tactics.length,
                       itemBuilder: (context, int index) {
@@ -49,7 +51,9 @@ class MenuScreen extends StatelessWidget {
                           child: ListTile(
                             title: Text(tactics[index]['title']),
                             onTap: () {
-                              print(tactics[index]['title'].split('\\n'));
+                              Provider.of<BoardData>(context, listen: false)
+                                  .setKaisetu(tactics, index);
+                              print("### ${tactics[index]['title']}");
                               Navigator.pushNamed(context, BoardScreen.id);
                             },
                           ),
