@@ -35,6 +35,7 @@ class BoardScreen extends StatelessWidget {
                       width: handWidth,
                       color: khandsColor,
                       child: ListView.builder(
+                        key: GlobalKey(),
                         reverse: true,
                         itemBuilder: (BuildContext context, index) {
                           int count = boardData.kaisetu.tejun[kyokumenIndex]
@@ -58,12 +59,14 @@ class BoardScreen extends StatelessWidget {
                             border: new Border.all(
                                 color: Colors.black54, width: 0.5)),
                         child: GridView.builder(
+                          key: GlobalKey(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 9,
                           ),
                           itemBuilder: (BuildContext context, index) {
                             return Container(
+                              key: ObjectKey(index),
                               decoration: BoxDecoration(
                                 color: Color(0xFFf2c077),
                                 // 枠線
@@ -91,6 +94,7 @@ class BoardScreen extends StatelessWidget {
                       width: handWidth,
                       color: khandsColor,
                       child: ListView.builder(
+                        key: GlobalKey(),
                         itemBuilder: (BuildContext context, index) {
                           int count = boardData.kaisetu.tejun[kyokumenIndex]
                               .sentehands[kHandsOrder[index]];
@@ -165,7 +169,7 @@ Widget handKoma(String filename, int count, double komaSize) {
     return Container();
   } else {
     return Container(
-        margin: EdgeInsets.fromLTRB(3, 3, 0, 3),
+        margin: const EdgeInsets.fromLTRB(3, 3, 0, 3),
         child: Row(children: <Widget>[
           SvgPicture.asset(
             filename,
