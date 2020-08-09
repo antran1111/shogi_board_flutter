@@ -6,7 +6,9 @@ class Kaisetu {
 
   Kaisetu({List<String> kif, String title = 'no title'}) {
     this.title = title;
+    // TODO: 初期盤面が後手スタートの場合まだ未対応
     bool goteban = false;
+    // TODO: まだ初期盤面以外未対応
     String goteMochigoma = '';
     String senteMochigoma = '';
     bool sashite = false;
@@ -26,16 +28,12 @@ class Kaisetu {
     List<String> moves = [''];
     List<String> memos = [];
     List<Map<String, dynamic>> node = [];
-    String tempMemo;
+    String tempMemo = "";
     int bunkiIndex = -1;
 
     for (String line in kif) {
       if (sashite == false) {
-        print(line);
-        print(line.trim());
-        print('この行#$line#手数----指手 ${line.startsWith('手数----指手')}');
         if (line.startsWith('手数----指手')) {
-          print("%%%%%%%%%%%%////////////");
           sashite = true;
           node = [
             {'turn': 0, 'parent': -1, 'children': []}
@@ -70,6 +68,8 @@ class Kaisetu {
           if (line.startsWith('変化')) {
             bunkiIndex = int.parse(line.substring(3, line.length - 1));
           } else if (line.startsWith('*')) {
+            print(tempMemo);
+            print(line.substring(1));
             tempMemo += '\n' + line.substring(1);
           } else {
             memos.add(tempMemo);

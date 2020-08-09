@@ -40,7 +40,7 @@ class BoardData extends ChangeNotifier {
   }
 
   void setKaisetu(List<DocumentSnapshot> snapshot, int index) async {
-    currentTitle = snapshot[index].data['title'];
+    currentTitle = snapshot[index].data['title'].toString();
     currentKif = snapshot[index].data['kif'].split('\\n');
     currentKif = currentKif.map((line) => line.trim()).toList();
     print(currentKif);

@@ -1,7 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:shogi_board/models/board_data.dart';
 import 'package:shogi_board/screens/board_screen.dart';
@@ -12,7 +10,6 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('hello2');
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -26,8 +23,6 @@ class MenuScreen extends StatelessWidget {
                 stream: _firestore.collection('tactics').snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    // 非同期処理未完了 = 通信中
-                    print('通信中！');
                     return Center(
                       child: CircularProgressIndicator(
                         backgroundColor: Colors.lightBlueAccent,
@@ -36,7 +31,6 @@ class MenuScreen extends StatelessWidget {
                   }
 
                   final tactics = snapshot.data.documents;
-                  print('tactics');
                   print(tactics);
 
                   return ListView.builder(
@@ -53,7 +47,6 @@ class MenuScreen extends StatelessWidget {
                             onTap: () {
                               Provider.of<BoardData>(context, listen: false)
                                   .setKaisetu(tactics, index);
-                              print("### ${tactics[index]['title']}");
                               Navigator.pushNamed(context, BoardScreen.id);
                             },
                           ),
