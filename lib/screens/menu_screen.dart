@@ -31,7 +31,6 @@ class MenuScreen extends StatelessWidget {
                   }
 
                   final tactics = snapshot.data.documents;
-                  print(tactics);
 
                   return ListView.builder(
                       itemCount: tactics.length,

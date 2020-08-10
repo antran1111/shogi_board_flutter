@@ -34,17 +34,20 @@ class BoardScreen extends StatelessWidget {
                       height: handHeight,
                       width: handWidth,
                       color: khandsColor,
-                      child: ListView.builder(
-                        key: GlobalKey(),
+                      child: ListView.separated(
                         reverse: true,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            Container(),
                         itemBuilder: (BuildContext context, index) {
                           int count = boardData.kaisetu.tejun[kyokumenIndex]
                               .gotehands[kHandsOrder[index]];
                           return handKoma(
-                              kKifPieceToImageFilename[
-                                  kGoteHandsOrderToSVG[index]],
-                              count,
-                              komaSize);
+                            kKifPieceToImageFilename[
+                                kGoteHandsOrderToSVG[index]],
+                            count,
+                            komaSize,
+                            'gotehand$index',
+                          );
                         },
                         itemCount: 7,
                       ),
@@ -66,7 +69,7 @@ class BoardScreen extends StatelessWidget {
                           ),
                           itemBuilder: (BuildContext context, index) {
                             return Container(
-                              key: ObjectKey(index),
+                              key: Key(index.toString()),
                               decoration: BoxDecoration(
                                 color: Color(0xFFf2c077),
                                 // 枠線
@@ -93,19 +96,21 @@ class BoardScreen extends StatelessWidget {
                       height: handHeight,
                       width: handWidth,
                       color: khandsColor,
-                      child: ListView.builder(
-                        key: GlobalKey(),
+                      child: ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) =>
+                            Container(),
                         itemBuilder: (BuildContext context, index) {
                           int count = boardData.kaisetu.tejun[kyokumenIndex]
                               .sentehands[kHandsOrder[index]];
 
                           return handKoma(
-                              kKifPieceToImageFilename[
-                                  kSenteHandsOrderToSVG[index]],
-                              count,
-                              komaSize);
+                            kKifPieceToImageFilename[
+                                kSenteHandsOrderToSVG[index]],
+                            count,
+                            komaSize,
+                            'sentehand$index',
+                          );
                         },
-                        itemExtent: 7,
                         itemCount: 7,
                       ),
                     ),
@@ -148,13 +153,10 @@ Widget branch(BoardData boardData) {
   List<dynamic> nextHandBranch =
       boardData.kaisetu.tejun[boardData.index].node['children'];
   if (nextHandBranch.length > 1) {
-    print(nextHandBranch);
     List<Widget> candidates = [];
 
     return Row(
       children: nextHandBranch.map((index) {
-        print(index);
-        print(boardData.kaisetu.tejun[index].moveStr);
         return Text(boardData.kaisetu.tejun[index].moveStr);
       }).toList(),
     );
@@ -164,11 +166,15 @@ Widget branch(BoardData boardData) {
 }
 
 //　駒台の駒の表現
-Widget handKoma(String filename, int count, double komaSize) {
+Widget handKoma(String filename, int count, double komaSize, String keyName) {
+  // MEMO: keyが効いているかは分からない
   if (count == 0) {
-    return Container();
+    return Container(
+      key: Key(keyName),
+    );
   } else {
     return Container(
+        key: Key(keyName),
         margin: const EdgeInsets.fromLTRB(3, 3, 0, 3),
         child: Row(children: <Widget>[
           SvgPicture.asset(

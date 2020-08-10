@@ -68,8 +68,6 @@ class Kaisetu {
           if (line.startsWith('変化')) {
             bunkiIndex = int.parse(line.substring(3, line.length - 1));
           } else if (line.startsWith('*')) {
-            print(tempMemo);
-            print(line.substring(1));
             tempMemo += '\n' + line.substring(1);
           } else {
             memos.add(tempMemo);
@@ -97,7 +95,6 @@ class Kaisetu {
       }
     }
 
-    print('memo $memos node $node');
     memos.add(tempMemo);
     tejun.add(
         Kyokumen(isInitailBoard: true, memo: memos[0], turn: 0, node: node[0]));
@@ -109,7 +106,6 @@ class Kaisetu {
           memo: memos[i],
           node: node[i]));
     }
-    print('局面数は ${tejun.length}');
   }
 }
 

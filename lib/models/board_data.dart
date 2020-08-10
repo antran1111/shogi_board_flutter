@@ -20,7 +20,6 @@ class BoardData extends ChangeNotifier {
   }
 
   void nextTurn() {
-    print(kaisetu.tejun[index].node['children']);
     if (kaisetu.tejun[index].node['children'].length > 0) {
       index = kaisetu.tejun[index].node['children'][0];
     } else {
@@ -30,7 +29,6 @@ class BoardData extends ChangeNotifier {
   }
 
   void backTurn() {
-    print(kaisetu.tejun[index].node['children']);
     if (kaisetu.tejun[index].node['parent'] >= 0) {
       index = kaisetu.tejun[index].node['parent'];
     } else {
@@ -43,7 +41,6 @@ class BoardData extends ChangeNotifier {
     currentTitle = snapshot[index].data['title'].toString();
     currentKif = snapshot[index].data['kif'].split('\\n');
     currentKif = currentKif.map((line) => line.trim()).toList();
-    print(currentKif);
     kaisetu = Kaisetu(kif: currentKif);
   }
 }
