@@ -4,6 +4,10 @@ Color khandsColor = Color(0xFFd67c00);
 Color kBoardColor = Color(0xFFf2c077);
 Color kKeisenColor = Color(0xFF79603b);
 
+// その局面の次の手番が先手か後手か
+const nextSenteban = false;
+const nextGoteban = true;
+
 const kMaisuKanjiToInt = {
   '一': 1,
   '二': 2,

@@ -61,6 +61,12 @@ class BoardScreen extends StatelessWidget {
                     );
                   }).toList(),
                 ),
+                IconButton(
+                  iconSize: 35,
+                  color: Colors.white,
+                  icon: Icon(Icons.screen_rotation),
+                  onPressed: () => boardData.flipBoard(),
+                ),
               ],
             );
           }),
@@ -82,8 +88,12 @@ class BoardScreen extends StatelessWidget {
                       itemBuilder: (BuildContext context, index) {
                         return Consumer<BoardData>(
                             builder: (context, boardData, child) {
-                          int count = boardData.kaisetu.tejun[boardData.index]
-                              .gotehands[kHandsOrder[index]];
+                          int count = boardData.isFlippedBoard
+                              ? boardData.kaisetu.tejun[boardData.index]
+                                  .sentehands[kHandsOrder[index]]
+                              : boardData.kaisetu.tejun[boardData.index]
+                                  .gotehands[kHandsOrder[index]];
+
                           return handKoma(
                             kKifPieceToImageFilename[
                                 kGoteHandsOrderToSVG[index]],
@@ -122,10 +132,26 @@ class BoardScreen extends StatelessWidget {
                             child: Center(
                               child: Consumer<BoardData>(
                                   builder: (context, boardData, child) {
-                                return SvgPicture.asset(
-                                  kKifPieceToImageFilename[boardData
+                                int boardIndex = index;
+                                String cellStr = ' ・';
+                                if (boardData.isFlippedBoard) {
+                                  boardIndex = 80 - boardIndex;
+                                  cellStr = boardData
                                       .kaisetu.tejun[boardData.index]
-                                      .getMasu(index)],
+                                      .getMasu(boardIndex);
+                                  if (cellStr == ' ・') {
+                                  } else if (cellStr.startsWith(' ')) {
+                                    cellStr = 'v' + cellStr.substring(1);
+                                  } else {
+                                    cellStr = ' ' + cellStr.substring(1);
+                                  }
+                                } else {
+                                  cellStr = boardData
+                                      .kaisetu.tejun[boardData.index]
+                                      .getMasu(boardIndex);
+                                }
+                                return SvgPicture.asset(
+                                  kKifPieceToImageFilename[cellStr],
                                   height: komaSize,
                                   width: komaSize,
                                 );
@@ -148,8 +174,11 @@ class BoardScreen extends StatelessWidget {
                       itemBuilder: (BuildContext context, index) {
                         return Consumer<BoardData>(
                             builder: (context, boardData, child) {
-                          int count = boardData.kaisetu.tejun[boardData.index]
-                              .sentehands[kHandsOrder[index]];
+                          int count = boardData.isFlippedBoard
+                              ? boardData.kaisetu.tejun[boardData.index]
+                                  .gotehands[kHandsOrder[index]]
+                              : boardData.kaisetu.tejun[boardData.index]
+                                  .sentehands[kHandsOrder[index]];
 
                           return handKoma(
                             kKifPieceToImageFilename[
@@ -184,7 +213,7 @@ class BoardScreen extends StatelessWidget {
               ],
             ),
           ),
-        ));o
+        ));
   }
 }
 

@@ -6,9 +6,7 @@ class Kaisetu {
 
   Kaisetu({List<String> kif, String title = 'no title'}) {
     this.title = title;
-    // TODO: 初期盤面が後手スタートの場合まだ未対応
-    bool goteban = false;
-    // TODO: まだ初期盤面以外未対応
+    bool nextTeban = nextSenteban;
     String goteMochigoma = '';
     String senteMochigoma = '';
     bool sashite = false;
@@ -31,7 +29,10 @@ class Kaisetu {
     String tempMemo = "";
     int bunkiIndex = -1;
 
+    bool isHalfwayKyokumen = false; // 初期局面が初期盤面でないか
+
     for (String line in kif) {
+      print('##$line##');
       if (sashite == false) {
         if (line.startsWith('手数----指手')) {
           sashite = true;
@@ -39,12 +40,13 @@ class Kaisetu {
             {'turn': 0, 'parent': -1, 'children': []}
           ];
         } else if (line.startsWith('後手番')) {
-          goteban = true;
+          nextTeban = nextGoteban;
         } else if (line.startsWith('先手の持駒')) {
           senteMochigoma = line.substring(6);
         } else if (line.startsWith('後手の持駒')) {
           goteMochigoma = line.substring(6);
         } else if (line.endsWith('|一')) {
+          isHalfwayKyokumen = true;
           boardList[0] = line.substring(1, line.length - 2);
         } else if (line.endsWith('|二')) {
           boardList[1] = line.substring(1, line.length - 2);
@@ -96,8 +98,22 @@ class Kaisetu {
     }
 
     memos.add(tempMemo);
-    tejun.add(
-        Kyokumen(isInitailBoard: true, memo: memos[0], turn: 0, node: node[0]));
+    // 初期盤面をセットする
+    if (isHalfwayKyokumen) {
+      tejun.add(Kyokumen(
+          isInitailBoard: false,
+          board: boardList,
+          senteHandsStr: senteMochigoma,
+          goteHandsStr: goteMochigoma,
+          nextTeban: nextTeban,
+          memo: memos[0],
+          turn: 0,
+          node: node[0]));
+    } else {
+      // 途中局面でないなら初期配置をセットする
+      tejun.add(Kyokumen(
+          isInitailBoard: true, memo: memos[0], turn: 0, node: node[0]));
+    }
     for (int i = 1; i < moves.length; i++) {
       tejun.add(Kyokumen(
           prevKyokumen: tejun[node[i]['parent']],
@@ -136,6 +152,7 @@ class Kyokumen {
     Kyokumen prevKyokumen,
     String senteHandsStr,
     String goteHandsStr,
+    bool nextTeban,
     int turn,
     String memo,
     Map<String, dynamic> node,
@@ -154,7 +171,8 @@ class Kyokumen {
       setInitialBoard(
           board: board,
           senteHandsStr: senteHandsStr,
-          goteHandsStr: goteHandsStr);
+          goteHandsStr: goteHandsStr,
+          nextTeban: nextTeban);
     } else {
       // 指し手とその前の局面がある場合
       setBoardFromMove(prevKyokumen, move);
@@ -178,8 +196,12 @@ class Kyokumen {
   }
 
   void setInitialBoard(
-      {List<String> board, String senteHandsStr, String goteHandsStr}) {
+      {List<String> board,
+      String senteHandsStr,
+      String goteHandsStr,
+      bool nextTeban = false}) {
     this._board = board;
+    this._senteban = nextTeban;
 
     List<String> senteHands = senteHandsStr.split(' ');
     List<String> goteHands = goteHandsStr.split(' ');
@@ -194,13 +216,13 @@ class Kyokumen {
     };
 
     _sentehands = {
-      '歩': 1,
-      '香': 2,
-      '桂': 3,
-      '銀': 4,
-      '金': 4,
-      '角': 1,
-      '飛': 2,
+      '歩': 0,
+      '香': 0,
+      '桂': 0,
+      '銀': 0,
+      '金': 0,
+      '角': 0,
+      '飛': 0,
     };
 
     for (String k in senteHands) {
@@ -315,7 +337,7 @@ class Kyokumen {
   void setHands(String senteHands, String goteHands) {}
 
   void initialBoard1() {
-    _senteban = false;
+    _senteban = nextSenteban;
     //この表現がわかりやすくて不都合ない
     _board = [
       'v香v桂v銀v金v玉v金v銀v桂v香',
@@ -351,7 +373,7 @@ class Kyokumen {
   }
 
   String getMasu(int index) {
-    if (index < 0 || 81 <= index) {
+    if (index < 0 || 81 < index) {
       return "誤";
     }
 
