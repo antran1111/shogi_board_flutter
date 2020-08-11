@@ -1,0 +1,84 @@
+name: shogi_board
+description: A new Flutter application.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.3
+  provider: ^4.3.1
+  firebase_core: ^0.4.5
+  firebase_auth: ^0.16.1
+  cloud_firestore: ^0.13.7
+  modal_progress_hud: ^0.1.3
+  flutter_svg: ^0.17.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/empty.svg
+    - assets/images/s_fu.svg
+    - assets/images/s_kyo.svg
+    - assets/images/s_kei.svg
+    - assets/images/s_gin.svg
+    - assets/images/s_kin.svg
+    - assets/images/s_kaku.svg
+    - assets/images/s_hi.svg
+    - assets/images/s_gin.svg
+    - assets/images/s_gyoku.svg
+    - assets/images/s_to.svg
+    - assets/images/s_narikyo.svg
+    - assets/images/s_narikei.svg
+    - assets/images/s_narigin.svg
+    - assets/images/s_uma.svg
+    - assets/images/s_ryu.svg
+    - assets/images/g_fu.svg
+    - assets/images/g_kyo.svg
+    - assets/images/g_kei.svg
+    - assets/images/g_gin.svg
+    - assets/images/g_kin.svg
+    - assets/images/g_kaku.svg
+    - assets/images/g_hi.svg
+    - assets/images/g_gin.svg
+    - assets/images/g_gyoku.svg
+    - assets/images/g_to.svg
+    - assets/images/g_narikyo.svg
+    - assets/images/g_narikei.svg
+    - assets/images/g_narigin.svg
+    - assets/images/g_uma.svg
+    - assets/images/g_ryu.svg
+
+  fonts:
+    - family: sawarabi
+      fonts:
+        - asset: fonts/sawarabi-gothic-medium.otf
+    - family: kosugi
+      fonts:
+        - asset: fonts/KosugiMaru-Regular.ttf
+    - family: mplus1
+      fonts:
+        - asset: fonts/MPLUSRounded1c-Bold.ttf
+    - family: notosans-bold
+      fonts:
+        - asset: fonts/NotoSansJP-Bold.otf
+    - family: notosans-medium
+      fonts:
+        - asset: fonts/NotoSansJP-Medium.otf
+    - family: notosans-regular
+      fonts:
+        - asset: fonts/NotoSansJP-Regular.otf
