@@ -16,8 +16,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
           fontFamily: 'notosans-medium',
-          //fontFamily: 'kosugi',
-          //fontFamily: 'mplus1',
         ),
         initialRoute: MenuScreen.id,
         routes: {
