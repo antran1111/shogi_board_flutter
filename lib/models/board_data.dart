@@ -11,21 +11,21 @@ class BoardData extends ChangeNotifier {
   List<Kaisetu> _kaisetuList = [];
   List<String> currentKif;
   String currentTitle;
-  int index = 0;
+  int currentTurn = 0;
   int selectedMoveIndex = 1;
 
   List<Kaisetu> get kaisetsuList => _kaisetuList;
 
   BoardData() {
-    index = 0;
+    currentTurn = 0;
     kaisetu = Kaisetu(kif: kif1);
-    selectedMoveIndex = kaisetu.tejun[index].node['children'][0];
+    selectedMoveIndex = kaisetu.tejun[currentTurn].node['children'][0];
   }
 
   void nextTurn() {
-    index = selectedMoveIndex;
-    if (kaisetu.tejun[index].node['children'].length > 0) {
-      selectedMoveIndex = kaisetu.tejun[index].node['children'][0];
+    currentTurn = selectedMoveIndex;
+    if (kaisetu.tejun[currentTurn].node['children'].length > 0) {
+      selectedMoveIndex = kaisetu.tejun[currentTurn].node['children'][0];
     } else {
       selectedMoveIndex = 0;
     }
@@ -39,10 +39,10 @@ class BoardData extends ChangeNotifier {
   }
 
   void backTurn() {
-    if (kaisetu.tejun[index].node['parent'] >= 0) {
-      index = kaisetu.tejun[index].node['parent'];
-      if (kaisetu.tejun[index].node['children'].length > 0) {
-        selectedMoveIndex = kaisetu.tejun[index].node['children'][0];
+    if (kaisetu.tejun[currentTurn].node['parent'] >= 0) {
+      currentTurn = kaisetu.tejun[currentTurn].node['parent'];
+      if (kaisetu.tejun[currentTurn].node['children'].length > 0) {
+        selectedMoveIndex = kaisetu.tejun[currentTurn].node['children'][0];
       } else {
         selectedMoveIndex = 0;
       }
@@ -61,13 +61,16 @@ class BoardData extends ChangeNotifier {
 
   // 次の手の候補インデックスを返す
   List<int> nextIndexList() {
-    return List<int>.from(kaisetu.tejun[index].node['children']);
+    return List<int>.from(kaisetu.tejun[currentTurn].node['children']);
   }
 
   void setKaisetu(List<DocumentSnapshot> snapshot, int index) async {
     currentTitle = snapshot[index].data['title'].toString();
     currentKif = snapshot[index].data['kif'].split('\\n');
     currentKif = currentKif.map((line) => line.trim()).toList();
+    currentTurn = 0;
+    selectedMoveIndex = 1;
+
     kaisetu = Kaisetu(kif: currentKif);
     // 初期盤面が後手番スタートなら盤面を反転させる
     if (kaisetu.tejun[0].senteban == nextGoteban) {

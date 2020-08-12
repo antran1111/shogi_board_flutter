@@ -56,7 +56,9 @@ class BoardScreen extends StatelessWidget {
                     icon: Icon(Icons.arrow_forward_ios),
                     onPressed: () => boardData.nextTurn()),
                 // 次の指し手（分岐がある場合は選択肢がドロップダウンででる領域
-                // ドロップダウンメニューの背景色に影響するためThemeでくるんでいる
+                // MEMO: 戻ったときに分岐の選択肢が一番最初の選択肢に戻っている
+                // 分岐がない場合はドロップダウンを表示しない（押しても反応しない）ようにしたほうがわかりやすい？ 
+                // if文でwidgetを出し分けるのもあり
             DropdownButton<int>(
               value: boardData.selectedMoveIndex,
               dropdownColor: Colors.green,
@@ -97,9 +99,9 @@ class BoardScreen extends StatelessWidget {
                         return Consumer<BoardData>(
                             builder: (context, boardData, child) {
                           int count = boardData.isFlippedBoard
-                              ? boardData.kaisetu.tejun[boardData.index]
+                              ? boardData.kaisetu.tejun[boardData.currentTurn]
                                   .sentehands[kHandsOrder[index]]
-                              : boardData.kaisetu.tejun[boardData.index]
+                              : boardData.kaisetu.tejun[boardData.currentTurn]
                                   .gotehands[kHandsOrder[index]];
 
                           return handKoma(
@@ -145,7 +147,7 @@ class BoardScreen extends StatelessWidget {
                                 if (boardData.isFlippedBoard) {
                                   boardIndex = 80 - boardIndex;
                                   cellStr = boardData
-                                      .kaisetu.tejun[boardData.index]
+                                      .kaisetu.tejun[boardData.currentTurn]
                                       .getMasu(boardIndex);
                                   if (cellStr == ' ・') {
                                   } else if (cellStr.startsWith(' ')) {
@@ -155,7 +157,7 @@ class BoardScreen extends StatelessWidget {
                                   }
                                 } else {
                                   cellStr = boardData
-                                      .kaisetu.tejun[boardData.index]
+                                      .kaisetu.tejun[boardData.currentTurn]
                                       .getMasu(boardIndex);
                                 }
                                 return SvgPicture.asset(
@@ -183,9 +185,9 @@ class BoardScreen extends StatelessWidget {
                         return Consumer<BoardData>(
                             builder: (context, boardData, child) {
                           int count = boardData.isFlippedBoard
-                              ? boardData.kaisetu.tejun[boardData.index]
+                              ? boardData.kaisetu.tejun[boardData.currentTurn]
                                   .gotehands[kHandsOrder[index]]
-                              : boardData.kaisetu.tejun[boardData.index]
+                              : boardData.kaisetu.tejun[boardData.currentTurn]
                                   .sentehands[kHandsOrder[index]];
 
                           return handKoma(
@@ -208,7 +210,7 @@ class BoardScreen extends StatelessWidget {
                     child: Consumer<BoardData>(
                         builder: (context, boardData, child) {
                       return Text(
-                        boardData.kaisetu.tejun[boardData.index].memo,
+                        boardData.kaisetu.tejun[boardData.currentTurn].memo,
                         style: new TextStyle(
                           fontSize: 16.0,
                           color: Colors.black,
@@ -227,7 +229,7 @@ class BoardScreen extends StatelessWidget {
 
 Widget branch(BoardData boardData) {
   List<dynamic> nextHandBranch =
-      boardData.kaisetu.tejun[boardData.index].node['children'];
+      boardData.kaisetu.tejun[boardData.currentTurn].node['children'];
   if (nextHandBranch.length > 1) {
     List<Widget> candidates = [];
 
