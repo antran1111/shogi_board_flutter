@@ -68,12 +68,15 @@ class BoardData extends ChangeNotifier {
     currentTitle = snapshot[index].data['title'].toString();
     currentKif = snapshot[index].data['kif'].split('\\n');
     currentKif = currentKif.map((line) => line.trim()).toList();
+    // 初期盤面に戻す
+    // メニューリストを行き来してもインデックスを保持するには
+    // リストごとのインデックスを保持する必要があり管理が大変
     currentTurn = 0;
     selectedMoveIndex = 1;
 
     kaisetu = Kaisetu(kif: currentKif);
     // 初期盤面が後手番スタートなら盤面を反転させる
-    if (kaisetu.tejun[0].senteban == nextGoteban) {
+    if (kaisetu.tejun[0].nextTeban == nextGoteban) {
       isFlippedBoard = true;
     }
   }

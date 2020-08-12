@@ -131,14 +131,14 @@ class Kyokumen {
   Map<String, int> _sentehands = {}; // 後手の持駒
   String moveStr = ''; // 指し手（この指し手で今の局面になった）
   String sujiDanStr = ''; // 同歩など筋段がわからなくなる場合用に前の局面の値を保持しておく
-  bool _senteban;
+  bool _nextTeban;
   String memo = '初期配置の解説です。初手は７６歩か２６歩が多い。７６歩は角道を開ける手で、２６歩は飛車先をついていく手になる。';
 
   // 現在の手数、一手前のインデックス、次の局面のインデックス配列
   // 例: {'turn': 15, 'parent': 14, 'children': [16,24]}
   Map<String, dynamic> node = {};
 
-  bool get senteban => _senteban;
+  bool get nextTeban => _nextTeban;
   int get turn => _turn;
   List<String> get board => _board;
   Map<String, int> get sentehands => _sentehands;
@@ -200,7 +200,7 @@ class Kyokumen {
       String goteHandsStr,
       bool nextTeban = false}) {
     this._board = board;
-    this._senteban = nextTeban;
+    this._nextTeban = nextTeban;
 
     List<String> senteHands = senteHandsStr.split(' ');
     List<String> goteHands = goteHandsStr.split(' ');
@@ -246,7 +246,7 @@ class Kyokumen {
     this._sentehands = copyMap(prevKyokumen.sentehands);
     this._gotehands = copyMap(prevKyokumen.gotehands);
     this._turn = prevKyokumen.turn + 1;
-    this._senteban = !prevKyokumen.senteban;
+    this._nextTeban = !prevKyokumen.nextTeban;
 
     List<String> moveList = move.split(' ');
     int tesu = int.parse(moveList[0]);
@@ -273,7 +273,7 @@ class Kyokumen {
     // 駒を取る
     captureKoma(toSuji, toDan);
     if (sashite.endsWith('打')) {
-      subHands(type, senteban);
+      subHands(type, nextTeban);
     } else {
       int fromSuji =
           int.parse(sashite.substring(sashite.length - 3, sashite.length - 2));
@@ -287,7 +287,7 @@ class Kyokumen {
       }
     }
 
-    String typeWithSengo = senteban ? ' ' + type : 'v' + type;
+    String typeWithSengo = nextTeban ? ' ' + type : 'v' + type;
     putKoma(toSuji, toDan, typeWithSengo);
   }
 
@@ -336,7 +336,7 @@ class Kyokumen {
   void setHands(String senteHands, String goteHands) {}
 
   void initialBoard1() {
-    _senteban = nextSenteban;
+    _nextTeban = nextSenteban;
     //この表現がわかりやすくて不都合ない
     _board = [
       'v香v桂v銀v金v玉v金v銀v桂v香',
