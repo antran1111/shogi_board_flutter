@@ -32,7 +32,6 @@ class Kaisetu {
     bool isHalfwayKyokumen = false; // 初期局面が初期盤面でないか
 
     for (String line in kif) {
-      print('##$line##');
       if (sashite == false) {
         if (line.startsWith('手数----指手')) {
           sashite = true;

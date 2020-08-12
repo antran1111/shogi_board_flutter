@@ -23,6 +23,11 @@ class BoardScreen extends StatelessWidget {
             style: TextStyle(),
           ),
         ),
+        // 下のバー　
+        // １つ前の分岐もしくは一番最初にもどる
+        // １手戻る、１手進む
+        // 分岐の選択
+        // 反転
         bottomNavigationBar: BottomAppBar(
           color: Theme.of(context).primaryColor,
           notchMargin: 6.0,
@@ -33,6 +38,11 @@ class BoardScreen extends StatelessWidget {
             ),
           ),
           child: Consumer<BoardData>(builder: (context, boardData, child) {
+            List<int> nextMoves = boardData.nextIndexList();
+            if (nextMoves.length == 0){
+              nextMoves.add(0);
+            }
+
             return Row(
               children: <Widget>[
                 IconButton(
@@ -46,21 +56,19 @@ class BoardScreen extends StatelessWidget {
                     icon: Icon(Icons.arrow_forward_ios),
                     onPressed: () => boardData.nextTurn()),
                 // 次の指し手（分岐がある場合は選択肢がドロップダウンででる領域
-                DropdownButton<String>(
-                  value: '☗５六歩',
-                  dropdownColor: Colors.white,
-                  onChanged: (line) => print("tap_$line!!"),
-                  items: <String>[
-                    '☗５六歩',
-                    '☗４六歩',
-                    '☗３六銀',
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
+                // ドロップダウンメニューの背景色に影響するためThemeでくるんでいる
+            DropdownButton<int>(
+              value: boardData.selectedMoveIndex,
+              dropdownColor: Colors.green,
+              onChanged: (tapIndex) =>boardData.setSelectedMoveIndex(tapIndex),
+              items: nextMoves.map<DropdownMenuItem<int>>((int value) {
+                return DropdownMenuItem<int>(
+                  value: value,
+                  child: Text( boardData.kaisetu.tejun[value].moveStr == null ? '' : boardData.kaisetu.tejun[value].moveStr,
+                  style: TextStyle(color: Colors.white, fontSize: 16),),
+                );
+              }).toList(),
+            ),
                 IconButton(
                   iconSize: 35,
                   color: Colors.white,

@@ -12,26 +12,40 @@ class BoardData extends ChangeNotifier {
   List<String> currentKif;
   String currentTitle;
   int index = 0;
+  int selectedMoveIndex = 1;
 
   List<Kaisetu> get kaisetsuList => _kaisetuList;
 
   BoardData() {
     index = 0;
     kaisetu = Kaisetu(kif: kif1);
+    selectedMoveIndex = kaisetu.tejun[index].node['children'][0];
   }
 
   void nextTurn() {
+    index = selectedMoveIndex;
     if (kaisetu.tejun[index].node['children'].length > 0) {
-      index = kaisetu.tejun[index].node['children'][0];
+      selectedMoveIndex = kaisetu.tejun[index].node['children'][0];
     } else {
-      index = 0;
+      selectedMoveIndex = 0;
     }
+    notifyListeners();
+  }
+
+  // 次の指し手を変更する（分岐
+  void setSelectedMoveIndex(int index) {
+    selectedMoveIndex = index;
     notifyListeners();
   }
 
   void backTurn() {
     if (kaisetu.tejun[index].node['parent'] >= 0) {
       index = kaisetu.tejun[index].node['parent'];
+      if (kaisetu.tejun[index].node['children'].length > 0) {
+        selectedMoveIndex = kaisetu.tejun[index].node['children'][0];
+      } else {
+        selectedMoveIndex = 0;
+      }
     } else {
       // 初期盤面だと伝える？
       // 今のところ何も起こらない
@@ -43,6 +57,11 @@ class BoardData extends ChangeNotifier {
   void flipBoard() {
     isFlippedBoard = !isFlippedBoard;
     notifyListeners();
+  }
+
+  // 次の手の候補インデックスを返す
+  List<int> nextIndexList() {
+    return List<int>.from(kaisetu.tejun[index].node['children']);
   }
 
   void setKaisetu(List<DocumentSnapshot> snapshot, int index) async {
