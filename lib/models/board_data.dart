@@ -53,6 +53,12 @@ class BoardData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void backInitialState() {
+    currentTurn = 0;
+    selectedMoveIndex = 1;
+    notifyListeners();
+  }
+
   // 画面を反転させる
   void flipBoard() {
     isFlippedBoard = !isFlippedBoard;

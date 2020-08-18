@@ -3,6 +3,7 @@ import 'package:shogi_board/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shogi_board/models/board_data.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:math';
 
 class BoardScreen extends StatelessWidget {
   static String id = '/board';
@@ -46,10 +47,21 @@ class BoardScreen extends StatelessWidget {
             return Row(
               children: <Widget>[
                 IconButton(
+                    iconSize: 55,
+                    color: Colors.white,
+                    icon: Icon(Icons.first_page),
+                    onPressed: () => boardData.backInitialState()),
+                IconButton(
                     iconSize: 35,
                     color: Colors.white,
-                    icon: Icon(Icons.arrow_back_ios),
+                    icon: Icon(Icons.arrow_back_ios, ),
                     onPressed: () => boardData.backTurn()),
+                // カスタムペイントで駒を描画する案（pngでジャギィがひどかったら考える）
+                CustomPaint(
+                  painter:_OutsiderShape(),
+                  size: Size(60.0, 60.0),
+                  isComplex: false,
+                ),
                 IconButton(
                     iconSize: 35,
                     color: Colors.white,
@@ -160,11 +172,16 @@ class BoardScreen extends StatelessWidget {
                                       .kaisetu.tejun[boardData.currentTurn]
                                       .getMasu(boardIndex);
                                 }
-                                return SvgPicture.asset(
-                                  kKifPieceToImageFilename[cellStr],
-                                  height: komaSize,
-                                  width: komaSize,
-                                );
+//                                return SvgPicture.asset(
+//                                  kKifPieceToImageFilename[cellStr],
+//                                  height: komaSize,
+//                                  width: komaSize,
+//                                );
+                                  return Image.asset(kKifPieceToImageFilename2[cellStr],
+                                    height: komaSize + 5,
+                                  width: komaSize + 5,
+                                    alignment: Alignment(0.5, 1),
+                                  );
                               }),
                             ),
                           );
@@ -262,5 +279,47 @@ Widget handKoma(String filename, int count, double komaSize, String keyName) {
           ),
           Text('$count', style: TextStyle(fontSize: 14)),
         ]));
+  }
+}
+
+
+class _OutsiderShape extends CustomPainter {
+
+  final Paint bookMarkPaint;
+  final double hexagonOffset = 15.0;
+  Path path = Path();
+
+  _OutsiderShape() : bookMarkPaint = new Paint() {
+    bookMarkPaint.color = Colors.redAccent;
+    bookMarkPaint.style = PaintingStyle.fill;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+
+    canvas.save();
+
+
+      canvas.rotate(pi);
+      canvas.translate(-size.width, -size.height);
+
+
+    path.moveTo(0.0, hexagonOffset);
+    path.relativeLineTo(size.width / 3, -hexagonOffset);
+    path.relativeLineTo(size.width / 3, 0.0);
+    path.relativeLineTo(size.width / 3, hexagonOffset);
+    path.relativeLineTo(0.0, size.height - hexagonOffset);
+    path.relativeLineTo(-size.width, 0.0);
+    path.close();
+
+    canvas.drawShadow(path, Colors.grey[900], 2.0, false);
+    canvas.drawPath(path, bookMarkPaint);
+
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }

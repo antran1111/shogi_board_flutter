@@ -113,6 +113,38 @@ const kKifPieceToImageFilename = {
   'v龍': 'assets/images/g_ryu.svg',
 };
 
+const kKifPieceToImageFilename2 = {
+  ' ・': 'assets/images/empty.png',
+  ' 歩': 'assets/images/s_fu.png',
+  ' 香': 'assets/images/s_kyo.png',
+  ' 桂': 'assets/images/s_kei.png',
+  ' 銀': 'assets/images/s_gin.png',
+  ' 金': 'assets/images/s_kin.png',
+  ' 角': 'assets/images/s_kaku.png',
+  ' 飛': 'assets/images/s_hi.png',
+  ' 玉': 'assets/images/s_gyoku.png',
+  ' と': 'assets/images/s_to.png',
+  ' 杏': 'assets/images/s_narikyo.png',
+  ' 圭': 'assets/images/s_narikei.png',
+  ' 全': 'assets/images/s_narigin.png',
+  ' 馬': 'assets/images/s_uma.png',
+  ' 龍': 'assets/images/s_ryu.png',
+  'v歩': 'assets/images/g_fu.png',
+  'v香': 'assets/images/g_kyo.png',
+  'v桂': 'assets/images/g_kei.png',
+  'v銀': 'assets/images/g_gin.png',
+  'v金': 'assets/images/g_kin.png',
+  'v角': 'assets/images/g_kaku.png',
+  'v飛': 'assets/images/g_hi.png',
+  'v玉': 'assets/images/g_gyoku.png',
+  'vと': 'assets/images/g_to.png',
+  'v杏': 'assets/images/g_narikyo.png',
+  'v圭': 'assets/images/g_narikei.png',
+  'v全': 'assets/images/g_narigin.png',
+  'v馬': 'assets/images/g_uma.png',
+  'v龍': 'assets/images/g_ryu.png',
+};
+
 const kHandsOrder = ['飛', '角', '金', '銀', '桂', '香', '歩'];
 
 const kSenteHandsOrderToSVG = [' 飛', ' 角', ' 金', ' 銀', ' 桂', ' 香', ' 歩'];
