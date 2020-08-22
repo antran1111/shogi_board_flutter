@@ -6,7 +6,7 @@ import 'package:shogi_board/screens/board_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   static String id = '/menu';
-  final _firestore = Firestore.instance;
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +30,12 @@ class MenuScreen extends StatelessWidget {
                     );
                   }
 
-                  final tactics = snapshot.data.documents;
+                  final tactics = snapshot.data.docs;
 
                   return ListView.builder(
                       itemCount: tactics.length,
                       itemBuilder: (context, int index) {
+                        var kaisetu = tactics[index];
                         return Container(
                           decoration: BoxDecoration(
                             border: Border(
@@ -42,7 +43,7 @@ class MenuScreen extends StatelessWidget {
                             ),
                           ),
                           child: ListTile(
-                            title: Text(tactics[index]['title']),
+                            title: Text(kaisetu.get('title')),
                             onTap: () {
                               Provider.of<BoardData>(context, listen: false)
                                   .setKaisetu(tactics, index);

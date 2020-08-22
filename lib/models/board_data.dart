@@ -71,8 +71,9 @@ class BoardData extends ChangeNotifier {
   }
 
   void setKaisetu(List<DocumentSnapshot> snapshot, int index) async {
-    currentTitle = snapshot[index].data['title'].toString();
-    currentKif = snapshot[index].data['kif'].split('\\n');
+    var tactics = snapshot[index].data;
+    currentTitle = snapshot[index].get('title'); //     ['title'].toString();
+    currentKif = snapshot[index].get('kif').split('\\n');
     currentKif = currentKif.map((line) => line.trim()).toList();
     // 初期盤面に戻す
     // メニューリストを行き来してもインデックスを保持するには

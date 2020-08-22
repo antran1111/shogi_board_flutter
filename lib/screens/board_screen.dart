@@ -15,7 +15,7 @@ class BoardScreen extends StatelessWidget {
     double boardSize = size.width * 9 / 11;
     double handWidth = size.width / 11;
     double handHeight = size.width / 11 * 7;
-    double komaSize = size.width / 11 * 0.8;
+    double komaSize = size.width / 11 * 0.8 +3;
 
     return Scaffold(
         appBar: AppBar(
@@ -56,12 +56,6 @@ class BoardScreen extends StatelessWidget {
                     color: Colors.white,
                     icon: Icon(Icons.arrow_back_ios, ),
                     onPressed: () => boardData.backTurn()),
-                // カスタムペイントで駒を描画する案（pngでジャギィがひどかったら考える）
-                CustomPaint(
-                  painter:_OutsiderShape(),
-                  size: Size(60.0, 60.0),
-                  isComplex: false,
-                ),
                 IconButton(
                     iconSize: 35,
                     color: Colors.white,
@@ -117,8 +111,7 @@ class BoardScreen extends StatelessWidget {
                                   .gotehands[kHandsOrder[index]];
 
                           return handKoma(
-                            kKifPieceToImageFilename[
-                                kGoteHandsOrderToSVG[index]],
+                            kKifPieceToImageFilename[kGoteHandsOrderToSVG[index]],
                             count,
                             komaSize,
                             'gotehand$index',
@@ -136,7 +129,7 @@ class BoardScreen extends StatelessWidget {
                       margin: EdgeInsets.all(3),
                       decoration: new BoxDecoration(
                           border: new Border.all(
-                              color: Colors.black54, width: 0.5)),
+                              color: Colors.black87, width: 0.5)),
                       child: GridView.builder(
                         key: GlobalKey(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -146,12 +139,13 @@ class BoardScreen extends StatelessWidget {
                           return Container(
                             key: Key(index.toString()),
                             decoration: BoxDecoration(
-                              color: Color(0xFFf2c077),
+                              color: Color(0xFFeeaf6a),
                               // 枠線
                               border:
-                                  Border.all(color: Colors.black54, width: 0.5),
+                                  Border.all(color: Colors.black87, width: 0.5),
                             ),
-                            child: Center(
+                            child: Container(
+                              alignment: Alignment(0.5, 1),
                               child: Consumer<BoardData>(
                                   builder: (context, boardData, child) {
                                 int boardIndex = index;
@@ -172,16 +166,12 @@ class BoardScreen extends StatelessWidget {
                                       .kaisetu.tejun[boardData.currentTurn]
                                       .getMasu(boardIndex);
                                 }
-//                                return SvgPicture.asset(
-//                                  kKifPieceToImageFilename[cellStr],
-//                                  height: komaSize,
-//                                  width: komaSize,
-//                                );
-                                  return Image.asset(kKifPieceToImageFilename2[cellStr],
-                                    height: komaSize + 5,
-                                  width: komaSize + 5,
-                                    alignment: Alignment(0.5, 1),
-                                  );
+                                return SvgPicture.asset(
+                                  kKifPieceToImageFilename[cellStr],
+                                  height: komaSize,
+                                  width: komaSize,
+                                  //alignment: Alignment(0.6, 1),
+                                );
                               }),
                             ),
                           );
@@ -271,55 +261,18 @@ Widget handKoma(String filename, int count, double komaSize, String keyName) {
     return Container(
         key: Key(keyName),
         margin: const EdgeInsets.fromLTRB(3, 3, 0, 3),
-        child: Row(children: <Widget>[
-          SvgPicture.asset(
-            filename,
-            height: komaSize,
-            width: komaSize * 0.9,
+        child: Stack(children: <Widget>[
+          Positioned(
+            child: SvgPicture.asset(filename,
+              height: komaSize,
+              width: komaSize,
+              //alignment: Alignment(0.5, 1),
+            ),
           ),
-          Text('$count', style: TextStyle(fontSize: 14)),
+          Positioned(
+          left: komaSize - 8,
+          top: komaSize / 8,
+          child: Text('$count', style: TextStyle(fontSize: 14),)),
         ]));
-  }
-}
-
-
-class _OutsiderShape extends CustomPainter {
-
-  final Paint bookMarkPaint;
-  final double hexagonOffset = 15.0;
-  Path path = Path();
-
-  _OutsiderShape() : bookMarkPaint = new Paint() {
-    bookMarkPaint.color = Colors.redAccent;
-    bookMarkPaint.style = PaintingStyle.fill;
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-
-    canvas.save();
-
-
-      canvas.rotate(pi);
-      canvas.translate(-size.width, -size.height);
-
-
-    path.moveTo(0.0, hexagonOffset);
-    path.relativeLineTo(size.width / 3, -hexagonOffset);
-    path.relativeLineTo(size.width / 3, 0.0);
-    path.relativeLineTo(size.width / 3, hexagonOffset);
-    path.relativeLineTo(0.0, size.height - hexagonOffset);
-    path.relativeLineTo(-size.width, 0.0);
-    path.close();
-
-    canvas.drawShadow(path, Colors.grey[900], 2.0, false);
-    canvas.drawPath(path, bookMarkPaint);
-
-    canvas.restore();
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }
