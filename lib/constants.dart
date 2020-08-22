@@ -8,6 +8,8 @@ Color kKeisenColor = Color(0xFF79603b);
 const nextSenteban = false;
 const nextGoteban = true;
 
+const kCellBorderSide = BorderSide(color: Colors.black, width: 0.6);
+
 const kMaisuKanjiToInt = {
   '一': 1,
   '二': 2,

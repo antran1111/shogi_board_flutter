@@ -142,7 +142,12 @@ class BoardScreen extends StatelessWidget {
                               color: Color(0xFFeeaf6a),
                               // 枠線
                               border:
-                                  Border.all(color: Colors.black87, width: 0.5),
+                                  //Border.all(color: Colors.black87, width: 0.5),
+                              Border(right: kCellBorderSide,
+                                top: kCellBorderSide,
+                                left: kCellBorderSide,
+                                bottom: kCellBorderSide,
+                              ), //color: Colors.black54, width: 0.5),
                             ),
                             child: Container(
                               alignment: Alignment(0.5, 1),
