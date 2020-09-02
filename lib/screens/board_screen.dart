@@ -3,7 +3,6 @@ import 'package:shogi_board/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shogi_board/models/board_data.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:math';
 
 class BoardScreen extends StatelessWidget {
   static String id = '/board';
@@ -125,64 +124,72 @@ class BoardScreen extends StatelessWidget {
                     height: boardSize,
                     width: boardSize,
                     color: kBoardColor,
-                    child: Container(
-                      margin: EdgeInsets.all(3),
-                      decoration: new BoxDecoration(
-                          border: new Border.all(
-                              color: Colors.black87, width: 0.5)),
-                      child: GridView.builder(
-                        key: GlobalKey(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 9,
+                    child:
+                    Stack(
+                      fit: StackFit.passthrough,
+                      children: [
+                        Image.asset('assets/images/shogiban_sente.png',
                         ),
-                        itemBuilder: (BuildContext context, index) {
-                          return Container(
-                            key: Key(index.toString()),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFeeaf6a),
-                              // 枠線
-                              border:
-                                  //Border.all(color: Colors.black87, width: 0.5),
-                              Border(right: kCellBorderSide,
-                                top: kCellBorderSide,
-                                left: kCellBorderSide,
-                                bottom: kCellBorderSide,
-                              ), //color: Colors.black54, width: 0.5),
-                            ),
-                            child: Container(
-                              alignment: Alignment(0.5, 1),
-                              child: Consumer<BoardData>(
-                                  builder: (context, boardData, child) {
-                                int boardIndex = index;
-                                String cellStr = ' ・';
-                                if (boardData.isFlippedBoard) {
-                                  boardIndex = 80 - boardIndex;
-                                  cellStr = boardData
-                                      .kaisetu.tejun[boardData.currentTurn]
-                                      .getMasu(boardIndex);
-                                  if (cellStr == ' ・') {
-                                  } else if (cellStr.startsWith(' ')) {
-                                    cellStr = 'v' + cellStr.substring(1);
+                      Container(
+                        margin: EdgeInsets.all(30),
+                        //decoration: //new BoxDecoration(
+                            //border: new Border.all(
+                            //    color: Colors.black87, width: 0.5)),
+                        child: GridView.builder(
+                          key: GlobalKey(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 9,
+                          ),
+                          itemBuilder: (BuildContext context, index) {
+                            return Container(
+                              key: Key(index.toString()),
+                              decoration: BoxDecoration(
+//                              color: Color(0xFFeeaf6a),
+//                              // 枠線
+//                              border:
+//                                  //Border.all(color: Colors.black87, width: 0.5),
+//                              Border(right: kCellBorderSide,
+//                                top: kCellBorderSide,
+//                                left: kCellBorderSide,
+//                                bottom: kCellBorderSide,
+//                              ), //color: Colors.black54, width: 0.5),
+                              ),
+                              child: Container(
+                                alignment: Alignment(0.5, 1),
+                                child: Consumer<BoardData>(
+                                    builder: (context, boardData, child) {
+                                  int boardIndex = index;
+                                  String cellStr = ' ・';
+                                  if (boardData.isFlippedBoard) {
+                                    boardIndex = 80 - boardIndex;
+                                    cellStr = boardData
+                                        .kaisetu.tejun[boardData.currentTurn]
+                                        .getMasu(boardIndex);
+                                    if (cellStr == ' ・') {
+                                    } else if (cellStr.startsWith(' ')) {
+                                      cellStr = 'v' + cellStr.substring(1);
+                                    } else {
+                                      cellStr = ' ' + cellStr.substring(1);
+                                    }
                                   } else {
-                                    cellStr = ' ' + cellStr.substring(1);
+                                    cellStr = boardData
+                                        .kaisetu.tejun[boardData.currentTurn]
+                                        .getMasu(boardIndex);
                                   }
-                                } else {
-                                  cellStr = boardData
-                                      .kaisetu.tejun[boardData.currentTurn]
-                                      .getMasu(boardIndex);
-                                }
-                                return SvgPicture.asset(
-                                  kKifPieceToImageFilename[cellStr],
-                                  height: komaSize,
-                                  width: komaSize,
-                                  //alignment: Alignment(0.6, 1),
-                                );
-                              }),
-                            ),
-                          );
-                        },
-                        itemCount: 81,
+                                  return SvgPicture.asset(
+                                    kKifPieceToImageFilename[cellStr],
+                                    height: komaSize,
+                                    width: komaSize,
+                                    //alignment: Alignment(0.6, 1),
+                                  );
+                                }),
+                              ),
+                            );
+                          },
+                          itemCount: 81,
+                        ),
                       ),
+                      ]
                     ),
                   ),
                   Container(
